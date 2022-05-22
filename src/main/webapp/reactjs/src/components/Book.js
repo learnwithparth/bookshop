@@ -58,7 +58,7 @@ export default class Book extends Component {
             .then(response => {
                 if(response.data != null) {
                     this.setState(this.initialState);
-                    alert("Book Save Successfully");
+                    alert("Book Saved Successfully");
                 }
             })
     }
