@@ -23,7 +23,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @CrossOrigin(origins="http://localhost:3000")
 
-public class MeritController implements Resource<Merit> {
+public class MeritController  {
 
     MeritService meritService;
 
@@ -33,7 +33,6 @@ public class MeritController implements Resource<Merit> {
     }
 
     @RequestMapping("/merit")
-    @Override
     public ResponseEntity<Collection<Merit>> findAll() {
         log.info("Merit - findAll");
         List<Merit> merit = meritService.findAll();
@@ -45,10 +44,7 @@ public class MeritController implements Resource<Merit> {
         return new ResponseEntity<>(merit, HttpStatus.OK);
     }
 
-    @Override
-    public ResponseEntity<Merit> findById(UUID id) {
-        return null;
-    }
+
 
 
     @GetMapping("/merit/{mobileOrEmail}")
@@ -56,39 +52,10 @@ public class MeritController implements Resource<Merit> {
         log.info("MeritController - Mobile no. " + id + " has inquired for merit no.");
         Merit meritObject = null;
         Optional<Merit> merit = Optional.ofNullable(meritService.findAllByRegisteredMobile(id));
-        if (!merit.isPresent()) {
-            throw new BookNotFoundException("Book not found");
-        } else {
-            meritObject = merit.get();
-            meritObject.add(linkTo(methodOn(MeritController.class).findAll()).withSelfRel());
-        }
-        System.out.println(meritObject);
-        return new ResponseEntity<>(meritObject, HttpStatus.OK);
+
+        return new ResponseEntity(merit, HttpStatus.OK);
     }
 
-    @Override
-    public ResponseEntity<Merit> save(Merit merit) {
-        return null;
-    }
 
-    @Override
-    public ResponseEntity<Merit> update(Merit merit) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<Merit> patch(UUID id, Map<Object, Object> fields) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<String> deleteById(UUID id) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<String> invalid() {
-        return null;
-    }
 
 }
