@@ -15,8 +15,6 @@ export default class NavigationBar extends React.Component {
                             <Nav className="mr-auto">
                                 <Link to={"viewMerit"} className={"nav-link"}>View Merit</Link>
                                 <Link to={"viewMeritList"} className={"nav-link"}>View Merit List</Link>
-                                <Link to={"add"} className={"nav-link"}>Add Book</Link>
-                                <Link to={"list"} className={"nav-link"}>Book List</Link>
                                 {/* <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
         <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
         <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>

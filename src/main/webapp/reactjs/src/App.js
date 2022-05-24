@@ -15,11 +15,10 @@ function App() {
   return (
     <Router>
         <NavigationBar/>
+        <br/>
         <Container>
         <Routes>
-            <Route path="/"  element={<Welcome/>}/>
-            <Route path="/add"  element={<Book/>}/>
-            <Route path="/list"  element={<BookList/>}/>
+            <Route path="/"  element={<Merit/>}/>
             <Route path="/viewMerit"  element={<Merit/>}/>
             <Route path="/viewMeritList"  element={<MeritList/>}/>
         </Routes>
