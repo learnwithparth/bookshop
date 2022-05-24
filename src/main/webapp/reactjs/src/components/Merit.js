@@ -39,8 +39,13 @@ export default class Merit extends React.Component {
             .then(response => response.data)
             .then((data) => {
                     this.setState({merits: data});
+                    if (data == null){
+                        alert("data not available!!!");
+                        this.state.merits.length=0;
+                    };
                 }
             );
+
         this.state.otpGenerated = true;
     }
 
@@ -61,10 +66,10 @@ export default class Merit extends React.Component {
                     <Form>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                             <Form.Label>Mobile No.</Form.Label>
-                            <Form.Control required type="text" name="registeredMobile"
+                            <Form.Control type="text" name="registeredMobile"
                                           value={this.state.registeredMobile}
                                           onChange={this.mobileNoChanged} placeholder="Enter registered mobile no."
-                                          maxlength="10"/>
+                                          maxlength="10" required/>
                             <Form.Text className="text-muted">
                                 Please enter the Mobile No. provided at the time of registration.
                             </Form.Text>
