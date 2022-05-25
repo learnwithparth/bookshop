@@ -80,7 +80,7 @@ export default class Merit extends React.Component {
                             <Form.Control type="text" name="registeredMobile"
                                           value={this.state.registeredMobile}
                                           onChange={this.mobileNoChanged} placeholder="Enter registered mobile no."
-                                          maxlength="10" required/>
+                                          style={{width: "450px"}}/>
                             <Form.Text className="text-muted">
                                 Please enter the Mobile No. provided at the time of registration.
                             </Form.Text>
@@ -90,7 +90,7 @@ export default class Merit extends React.Component {
                                 <Form.Control required type="text" name="otp" value={this.state.otp}
                                               onChange={this.otp}
                                               placeholder="Enter the OTP received on registered mobile no. or email"
-                                              maxlength="6"/>
+                                              style={{width: "450px"}}/>
                             </div>
                         </Form.Group>
                         {/*{!this.state.otpGenerated ?*/}
@@ -131,12 +131,6 @@ export default class Merit extends React.Component {
                                             <td>{merit.charusatMeritMarks}</td>
                                             <td>{merit.charusatMeritNo}</td>
                                             <td>{merit.acpcMeritNo}</td>
-                                            <td>
-                                                <Button size={"sm"} variant={"outline-primary"}><FontAwesomeIcon
-                                                    icon={faEdit}/></Button>
-                                                <Button size={"sm"} variant={"outline-danger"}><FontAwesomeIcon
-                                                    icon={faTrash}/></Button>
-                                            </td>
                                         </tr>
                                     ))
                             }

@@ -7,6 +7,7 @@ import com.mightyjava.exception.BookNotFoundException;
 import com.mightyjava.resource.Resource;
 import com.mightyjava.resource.impl.BookResourceImpl;
 import com.mightyjava.service.MeritService;
+import com.mightyjava.service.OTPService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,25 +27,19 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class MeritController  {
 
     MeritService meritService;
+    OTPService otpService;
 
     @Autowired
-    public MeritController(MeritService meritService) {
-        this.meritService = meritService;
+    public MeritController(MeritService meritService, OTPService otpService) {
+        this.meritService = meritService; this.otpService=otpService;
     }
 
     @RequestMapping("/merit")
     public ResponseEntity<Collection<Merit>> findAll() {
         log.info("Merit - findAll");
         List<Merit> merit = meritService.findAll();
-//        List<Merit> response = new ArrayList<>();
-//        merit.forEach(merit -> {
-//            merit.add(linkTo(methodOn(BookResourceImpl.class).findById(merit.getId())).withSelfRel());
-//            response.add(merit);
-//        });
         return new ResponseEntity<>(merit, HttpStatus.OK);
     }
-
-
 
 
     @GetMapping("/merit/{mobileOrEmail}")
@@ -62,11 +57,12 @@ public class MeritController  {
     }
 
     @GetMapping("/merit/generateOTP/{mobileOrEmail}")
-    public ResponseEntity<Merit> generateOTP(@PathVariable("mobileOrEmail") String id) {
-        log.info("MeritController - Mobile no. " + id + " has inquired for merit no.");
-        Optional<Merit> merit = Optional.ofNullable(meritService.findAllByRegisteredMobile(id));
-        if(merit.isPresent()) {
-            return new ResponseEntity("OTP sent to your register Mobile no. or Email address", HttpStatus.OK);
+    public ResponseEntity<Merit> generateOTP(@PathVariable("mobileOrEmail") String mobileNo) {
+        log.info("MeritController - Mobile no. " + mobileNo + " has inquired for merit no.");
+        Optional<Merit> merit = Optional.ofNullable(meritService.findAllByRegisteredMobile(mobileNo));
+        if(merit.isPresent() & otpService.generateOTP(mobileNo)) {
+            log.info("OTP sent to " + mobileNo);
+                return new ResponseEntity("OTP sent to your register Mobile no. or Email address", HttpStatus.OK);
         } else {
             return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
         }
