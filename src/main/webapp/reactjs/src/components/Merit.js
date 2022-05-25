@@ -32,7 +32,18 @@ export default class Merit extends React.Component {
 
 
     findMeritDetails = event => {
+        //this.setState(() => this.initialState);
+        const url = "http://localhost:8081/admission/merit/generateOTP/" + this.state.registeredMobile;
 
+        axios.get(url)
+            .then(response => {console.log(response.data)})
+            .catch(error => alert('Invalid Mobile No.'));
+
+        this.state.otpGenerated = true;
+    }
+
+    showMeritDetails = event => {
+        //this.setState(() => this.initialState);
         let url = "http://localhost:8081/admission/merit/" + this.state.registeredMobile;
 
         axios.get(url)
@@ -44,9 +55,9 @@ export default class Merit extends React.Component {
                         this.state.merits.length=0;
                     };
                 }
-            );
+            ).catch(error => alert('Invalid Mobile No.'));
 
-        this.state.otpGenerated = true;
+        //this.state.otpGenerated = true;
     }
 
     mobileNoChanged = event => {
@@ -82,14 +93,16 @@ export default class Merit extends React.Component {
                                               maxlength="6"/>
                             </div>
                         </Form.Group>
-                        {!this.state.otpGenerated ?
+                        {/*{!this.state.otpGenerated ?*/}
                             <Button onClick={(event) => this.findMeritDetails(event)} variant="primary" type="submit">
                                 Generate OTP
                             </Button>
-                            : <Button onClick={(event) => this.findMeritDetails(event)} variant="primary" type="submit">
+                        {' '}
+                            {/*: */}
+                        <Button onClick={(event) => this.showMeritDetails(event)} variant="primary" type="submit">
                                 Show Merit
                             </Button>
-                        }
+                        {/*}*/}
                         {' '}
                         <Button onClick={(event) => this.resetMerit(event)} variant="primary" type="reset">
                             <FontAwesomeIcon icon={faUndo}/> Reset

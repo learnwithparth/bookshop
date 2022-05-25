@@ -52,9 +52,24 @@ public class MeritController  {
         log.info("MeritController - Mobile no. " + id + " has inquired for merit no.");
         Merit meritObject = null;
         Optional<Merit> merit = Optional.ofNullable(meritService.findAllByRegisteredMobile(id));
-        List<Merit> temp = new ArrayList<>();
-        temp.add(meritService.findAllByRegisteredMobile(id));
-        return new ResponseEntity(temp, HttpStatus.OK);
+        if(merit.isPresent()) {
+            List<Merit> temp = new ArrayList<>();
+            temp.add(meritService.findAllByRegisteredMobile(id));
+            return new ResponseEntity(temp, HttpStatus.OK);
+        } else {
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/merit/generateOTP/{mobileOrEmail}")
+    public ResponseEntity<Merit> generateOTP(@PathVariable("mobileOrEmail") String id) {
+        log.info("MeritController - Mobile no. " + id + " has inquired for merit no.");
+        Optional<Merit> merit = Optional.ofNullable(meritService.findAllByRegisteredMobile(id));
+        if(merit.isPresent()) {
+            return new ResponseEntity("OTP sent to your register Mobile no. or Email address", HttpStatus.OK);
+        } else {
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+        }
     }
 
 
