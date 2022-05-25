@@ -34,22 +34,17 @@ public class MeritController  {
         this.meritService = meritService; this.otpService=otpService;
     }
 
-    @RequestMapping("/merit")
-    public ResponseEntity<Collection<Merit>> findAll() {
-        log.info("Merit - findAll");
-        List<Merit> merit = meritService.findAll();
-        return new ResponseEntity<>(merit, HttpStatus.OK);
-    }
-
-
-    @GetMapping("/merit/{mobileOrEmail}")
-    public ResponseEntity<Merit> findByRegisteredMobileORRegisteredEmail(@PathVariable("mobileOrEmail") String id) {
-        log.info("MeritController - Mobile no. " + id + " has inquired for merit no.");
+    @GetMapping("/merit/validateOTP")
+    public ResponseEntity<Merit> findByRegisteredMobileORRegisteredEmail(@RequestParam("registeredMobile") String mobileNo,
+                                                                         @RequestParam("otp") int otp) {
+        log.info("MeritController - Mobile no. " + mobileNo + " has inquired for merit no. with OTP " + otp);
         Merit meritObject = null;
-        Optional<Merit> merit = Optional.ofNullable(meritService.findAllByRegisteredMobile(id));
-        if(merit.isPresent()) {
+        Optional<Merit> merit = Optional.ofNullable(meritService.findAllByRegisteredMobile(mobileNo));
+        if(merit.isPresent() & otpService.validateOTP(mobileNo, otp)) {
+            log.info(" Record found!!! " + mobileNo);
             List<Merit> temp = new ArrayList<>();
-            temp.add(meritService.findAllByRegisteredMobile(id));
+            temp.add(meritService.findAllByRegisteredMobile(mobileNo));
+            log.info("Registered Mobile No is " + temp.get(0).getRegisteredMobile());
             return new ResponseEntity(temp, HttpStatus.OK);
         } else {
             return new ResponseEntity(null, HttpStatus.BAD_REQUEST);

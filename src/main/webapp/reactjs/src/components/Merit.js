@@ -9,6 +9,7 @@ export default class Merit extends React.Component {
         super(props);
         this.mobileNoChanged = this.mobileNoChanged.bind(this);
 
+
         this.state = {
             merits: [],
             otpGenerated: false
@@ -23,7 +24,8 @@ export default class Merit extends React.Component {
         acpcMeritNo: '',
         registeredMobile: '',
         registeredEmail: '',
-        optGenerated: false
+        optGenerated: false,
+        otp: ''
     }
 
     resetMerit = (event) => {
@@ -36,28 +38,29 @@ export default class Merit extends React.Component {
         const url = "http://localhost:8081/admission/merit/generateOTP/" + this.state.registeredMobile;
 
         axios.get(url)
-            .then(response => {console.log(response.data)})
-            .catch(error => alert('Invalid Mobile No.'));
+            .then(response => {
+                // console.log(response.data);
+                this.state.otpGenerated = true;
+            })
+            .catch(error => {
+                this.state.otpGenerated = false;
+                alert('Invalid Mobile No.');
+            });
 
-        this.state.otpGenerated = true;
+
     }
 
     showMeritDetails = event => {
-        //this.setState(() => this.initialState);
-        let url = "http://localhost:8081/admission/merit/" + this.state.registeredMobile;
-
+        const url = "http://localhost:8081/admission/merit/validateOTP?registeredMobile="+this.state.registeredMobile+"&otp="+this.state.otp;
+        //alert(url);
         axios.get(url)
             .then(response => response.data)
             .then((data) => {
                     this.setState({merits: data});
-                    if (data == null){
-                        alert("data not available!!!");
-                        this.state.merits.length=0;
-                    };
+                    //alert("Received " +this.state.merits.length + " records");
                 }
             ).catch(error => alert('Invalid Mobile No.'));
-
-        //this.state.otpGenerated = true;
+        this.state.otpGenerated = false;
     }
 
     mobileNoChanged = event => {
@@ -85,21 +88,24 @@ export default class Merit extends React.Component {
                                 Please enter the Mobile No. provided at the time of registration.
                             </Form.Text>
                             <br/>
-                            <div>
-                                <Form.Label>One Time Password (OTP)</Form.Label>
-                                <Form.Control required type="text" name="otp" value={this.state.otp}
-                                              onChange={this.otp}
-                                              placeholder="Enter the OTP received on registered mobile no. or email"
-                                              style={{width: "450px"}}/>
-                            </div>
+                            {/*{this.state.otpGenerated ?*/}
+                                <div>
+                                    <Form.Label>One Time Password (OTP)</Form.Label>
+                                    <Form.Control required type="text" name="otp"
+                                                  value={this.state.otp}
+                                                  onChange={this.mobileNoChanged}
+                                                  placeholder="Enter the OTP received on registered mobile no. or email"
+                                                  style={{width: "450px"}}/>
+                                </div>
+                                {/*: null*/}
+                            {/*}*/}
                         </Form.Group>
                         {/*{!this.state.otpGenerated ?*/}
                             <Button onClick={(event) => this.findMeritDetails(event)} variant="primary" type="submit">
                                 Generate OTP
                             </Button>
-                        {' '}
-                            {/*: */}
-                        <Button onClick={(event) => this.showMeritDetails(event)} variant="primary" type="submit">
+                            {/*:*/}
+                            <Button onClick={(event) => this.showMeritDetails(event)} type="submit">
                                 Show Merit
                             </Button>
                         {/*}*/}

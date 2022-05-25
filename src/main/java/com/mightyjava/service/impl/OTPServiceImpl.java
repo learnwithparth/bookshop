@@ -4,6 +4,7 @@ import com.mightyjava.service.OTPService;
 import com.google.common.cache.LoadingCache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -14,10 +15,11 @@ import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Service
 public class OTPServiceImpl implements OTPService {
 
-    private static final Integer EXPIRE_MINS = 5;
+    private static final Integer EXPIRE_MINS = 2;
     private LoadingCache otpCache;
 
     public OTPServiceImpl() {
@@ -34,19 +36,21 @@ public class OTPServiceImpl implements OTPService {
     @Override
     public boolean generateOTP(String mobileNo) {
         Random random = new Random();
-        int otp = 100000 + random.nextInt(900000);
+        //int otp = 100000 + random.nextInt(900000);
+        int otp=123;
         otpCache.put(mobileNo, otp);
-        sendOTPSms("VDJ1muqjMtm6puO4",
-                otp + " is your One Time Password(OTP) for Merit Access. This OTP is valid till 120 sec - CHARUSAT",
-                "CHRUST",
-                mobileNo);
+//        sendOTPSms("VDJ1muqjMtm6puO4",
+//                otp + " is your One Time Password(OTP) for Merit Access. This OTP is valid till 120 sec - CHARUSAT",
+//                "CHRUST",
+//                mobileNo);
         return true;
     }
 
     @Override
     public boolean validateOTP(String mobileNo, int clientOTP) {
         try {
-            if (Integer.getInteger(otpCache.get(mobileNo).toString()) == clientOTP) {
+            //log.info("Value of OTP "+((Integer) otpCache.get(mobileNo)).intValue());
+            if (((Integer) otpCache.get(mobileNo)).intValue() == clientOTP) {
                 return true;
             }
         } catch (ExecutionException e) {
