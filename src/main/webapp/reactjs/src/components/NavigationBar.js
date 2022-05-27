@@ -2,6 +2,7 @@ import React from "react";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import logo from '../../src/images/logo.png';
 
 export default class NavigationBar extends React.Component {
     render() {
@@ -9,7 +10,7 @@ export default class NavigationBar extends React.Component {
             <div>
                 <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
                     <Container>
-                        <Navbar.Brand href="#home">CHARUSAT</Navbar.Brand>
+                        <Navbar.Brand href="#home"><img src={logo} width={30} height={30}></img>{' '}CHARUSAT</Navbar.Brand>
                         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                         <Navbar.Collapse id="responsive-navbar-nav">
                             <Nav className="mr-auto">

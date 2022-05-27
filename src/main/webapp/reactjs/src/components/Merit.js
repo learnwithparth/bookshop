@@ -5,14 +5,11 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEdit, faTrash, faUndo} from "@fortawesome/free-solid-svg-icons";
 
 export default class Merit extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.mobileNoChanged = this.mobileNoChanged.bind(this);
-
-
         this.state = {
             merits: [],
-            otpGenerated: false
         };
     }
 
@@ -24,7 +21,7 @@ export default class Merit extends React.Component {
         acpcMeritNo: '',
         registeredMobile: '',
         registeredEmail: '',
-        optGenerated: false,
+        //optGenerated: false,
         otp: ''
     }
 
@@ -34,33 +31,27 @@ export default class Merit extends React.Component {
 
 
     findMeritDetails = event => {
-        //this.setState(() => this.initialState);
         const url = "http://localhost:8081/admission/merit/generateOTP/" + this.state.registeredMobile;
 
         axios.get(url)
             .then(response => {
-                // console.log(response.data);
-                this.state.otpGenerated = true;
+                alert(response.data);
             })
             .catch(error => {
-                this.state.otpGenerated = false;
                 alert('Invalid Mobile No.');
             });
-
-
     }
 
     showMeritDetails = event => {
+        event.preventDefault();
         const url = "http://localhost:8081/admission/merit/validateOTP?registeredMobile="+this.state.registeredMobile+"&otp="+this.state.otp;
-        //alert(url);
         axios.get(url)
-            .then(response => response.data)
-            .then((data) => {
-                    this.setState({merits: data});
-                    //alert("Received " +this.state.merits.length + " records");
-                }
-            ).catch(error => alert('Invalid Mobile No.'));
-        this.state.otpGenerated = false;
+            .then(response => {
+                const merits = response.data;
+                this.setState({merits});
+            } )
+            .catch(error => alert('Invalid OTP'));
+        //this.state.otpGenerated = false;
     }
 
     mobileNoChanged = event => {
@@ -83,7 +74,8 @@ export default class Merit extends React.Component {
                             <Form.Control type="text" name="registeredMobile"
                                           value={this.state.registeredMobile}
                                           onChange={this.mobileNoChanged} placeholder="Enter registered mobile no."
-                                          style={{width: "450px"}}/>
+                                          style={{width: "450px"}}
+                            required/>
                             <Form.Text className="text-muted">
                                 Please enter the Mobile No. provided at the time of registration.
                             </Form.Text>
@@ -91,11 +83,12 @@ export default class Merit extends React.Component {
                             {/*{this.state.otpGenerated ?*/}
                                 <div>
                                     <Form.Label>One Time Password (OTP)</Form.Label>
-                                    <Form.Control required type="text" name="otp"
+                                    <Form.Control type="text" name="otp"
                                                   value={this.state.otp}
                                                   onChange={this.mobileNoChanged}
                                                   placeholder="Enter the OTP received on registered mobile no. or email"
-                                                  style={{width: "450px"}}/>
+                                                  style={{width: "450px"}}
+                                                  required/>
                                 </div>
                                 {/*: null*/}
                             {/*}*/}

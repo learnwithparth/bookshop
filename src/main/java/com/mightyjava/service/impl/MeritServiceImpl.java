@@ -5,6 +5,7 @@ import com.mightyjava.repository.MeritRepository;
 import com.mightyjava.service.MeritService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,6 +31,13 @@ public class MeritServiceImpl implements MeritService {
 
     @Override
     public Merit findAllByRegisteredMobile(String registeredMobile) {
+        meritCheckedUpdate(registeredMobile);
         return meritRepository.findAllByRegisteredMobile(registeredMobile);
+    }
+    @Transactional
+    public void meritCheckedUpdate(String registeredMobile){
+        Merit merit = meritRepository.findAllByRegisteredMobile(registeredMobile);
+        merit.setMeritChecked(true);
+        meritRepository.save(merit);
     }
 }

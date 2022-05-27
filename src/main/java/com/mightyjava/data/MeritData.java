@@ -13,4 +13,5 @@ public class MeritData {
     private String acpcMeritNo;
     private String registeredMobile;
     private String registeredEmail;
+    private Boolean meritChecked;
 }

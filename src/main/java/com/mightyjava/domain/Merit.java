@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.springframework.hateoas.Link;
@@ -23,8 +24,8 @@ import lombok.Setter;
 
 public class Merit extends RepresentationModel<Merit>{
     @Id
-    @GeneratedValue
-    private UUID id;
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Long id;
     private String applicationNo;
     private String registeredName;
     private String charusatMeritMarks;
@@ -32,6 +33,7 @@ public class Merit extends RepresentationModel<Merit>{
     private String acpcMeritNo;
     private String registeredMobile;
     private String registeredEmail;
+    private Boolean meritChecked;
 
     public Merit(String applicationNo, String registeredName, String charusatMeritMarks, String charusatMeritNo, String acpcMeritNo, String registeredMobile, String registeredEmail) {
 
@@ -42,10 +44,11 @@ public class Merit extends RepresentationModel<Merit>{
         this.acpcMeritNo = acpcMeritNo;
         this.registeredMobile = registeredMobile;
         this.registeredEmail = registeredEmail;
+        this.meritChecked = meritChecked;
     }
 
     @JsonCreator
-    public Merit(@JsonProperty("id") UUID id, @JsonProperty("applicationNo") String applicationNo, @JsonProperty("registeredName") String registeredName, @JsonProperty("charusatMeritMarks") String charusatMeritMarks, @JsonProperty("charusatMeritNo") String charusatMeritNo, @JsonProperty("acpcMeritNo") String acpcMeritNo, @JsonProperty("registeredMobile") String registeredMobile, @JsonProperty("registeredEmail") String registeredEmail) {
+    public Merit(@JsonProperty("id") Long id, @JsonProperty("applicationNo") String applicationNo, @JsonProperty("registeredName") String registeredName, @JsonProperty("charusatMeritMarks") String charusatMeritMarks, @JsonProperty("charusatMeritNo") String charusatMeritNo, @JsonProperty("acpcMeritNo") String acpcMeritNo, @JsonProperty("registeredMobile") String registeredMobile, @JsonProperty("registeredEmail") String registeredEmail, @JsonProperty("meritChecked") Boolean meritChecked) {
         this.id = id;
         this.applicationNo = applicationNo;
         this.registeredName = registeredName;
@@ -54,6 +57,7 @@ public class Merit extends RepresentationModel<Merit>{
         this.acpcMeritNo = acpcMeritNo;
         this.registeredMobile = registeredMobile;
         this.registeredEmail = registeredEmail;
+        this.meritChecked = meritChecked;
     }
 
 

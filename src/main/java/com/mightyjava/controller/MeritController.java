@@ -34,8 +34,15 @@ public class MeritController  {
         this.meritService = meritService; this.otpService=otpService;
     }
 
+    @GetMapping("/merit/showAll")
+    public ResponseEntity<Merit> findAll(){
+        log.info("Fetching all merits");
+        List<Merit> merit = meritService.findAll();
+        return new ResponseEntity(merit, HttpStatus.OK);
+    }
+
     @GetMapping("/merit/validateOTP")
-    public ResponseEntity<Merit> findByRegisteredMobileORRegisteredEmail(@RequestParam("registeredMobile") String mobileNo,
+    public ResponseEntity<Merit> validateOTP(@RequestParam("registeredMobile") String mobileNo,
                                                                          @RequestParam("otp") int otp) {
         log.info("MeritController - Mobile no. " + mobileNo + " has inquired for merit no. with OTP " + otp);
         Merit meritObject = null;
@@ -54,8 +61,9 @@ public class MeritController  {
     @GetMapping("/merit/generateOTP/{mobileOrEmail}")
     public ResponseEntity<Merit> generateOTP(@PathVariable("mobileOrEmail") String mobileNo) {
         log.info("MeritController - Mobile no. " + mobileNo + " has inquired for merit no.");
-        Optional<Merit> merit = Optional.ofNullable(meritService.findAllByRegisteredMobile(mobileNo));
-        if(merit.isPresent() & otpService.generateOTP(mobileNo)) {
+        //Optional<Merit> merit = Optional.ofNullable(meritService.findAllByRegisteredMobile(mobileNo));
+        Merit merit = meritService.findAllByRegisteredMobile(mobileNo);
+        if(merit != null & otpService.generateOTP(mobileNo)) {
             log.info("OTP sent to " + mobileNo);
                 return new ResponseEntity("OTP sent to your register Mobile no. or Email address", HttpStatus.OK);
         } else {
