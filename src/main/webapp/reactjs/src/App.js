@@ -10,6 +10,7 @@ import BookList from './components/BookLIst';
 import Merit from "./components/Merit";
 import MeritList from "./components/MeritList";
 import {ModalFooter} from "react-bootstrap";
+import MeritView from "./components/MeritView";
 
 function App() {
   return (
@@ -18,9 +19,12 @@ function App() {
         <br/>
         <Container>
         <Routes>
-            <Route path="/"  element={<Merit/>}/>
-            <Route path="/viewMerit"  element={<Merit/>}/>
+            <Route path="/"  element={<MeritList/>}/>
+            <Route path="/viewMerit"  element={<MeritView/>}/>
             <Route path="/viewMeritList"  element={<MeritList/>}/>
+            <Route path="/addMerit"  element={<Merit/>}/>
+            <Route path="/editMerit"  element={<Merit/>}/>
+            <Route path="/deleteMerit"  element={<Merit/>}/>
         </Routes>
             </Container>
         <Footer/>

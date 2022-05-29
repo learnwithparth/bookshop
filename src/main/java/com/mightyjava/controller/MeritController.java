@@ -24,7 +24,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @CrossOrigin(origins="http://localhost:3000")
 
-public class MeritController  {
+public class MeritController {
 
     MeritService meritService;
     OTPService otpService;
@@ -41,11 +41,11 @@ public class MeritController  {
         return new ResponseEntity(merit, HttpStatus.OK);
     }
 
+
     @GetMapping("/merit/validateOTP")
     public ResponseEntity<Merit> validateOTP(@RequestParam("registeredMobile") String mobileNo,
                                                                          @RequestParam("otp") int otp) {
         log.info("MeritController - Mobile no. " + mobileNo + " has inquired for merit no. with OTP " + otp);
-        Merit meritObject = null;
         Optional<Merit> merit = Optional.ofNullable(meritService.findAllByRegisteredMobile(mobileNo));
         if(merit.isPresent() & otpService.validateOTP(mobileNo, otp)) {
             log.info(" Record found!!! " + mobileNo);
@@ -62,15 +62,34 @@ public class MeritController  {
     public ResponseEntity<Merit> generateOTP(@PathVariable("mobileOrEmail") String mobileNo) {
         log.info("MeritController - Mobile no. " + mobileNo + " has inquired for merit no.");
         //Optional<Merit> merit = Optional.ofNullable(meritService.findAllByRegisteredMobile(mobileNo));
-        Merit merit = meritService.findAllByRegisteredMobile(mobileNo);
-        if(merit != null & otpService.generateOTP(mobileNo)) {
-            log.info("OTP sent to " + mobileNo);
+        Merit merit;
+        if(mobileNo != null) {
+            merit = meritService.findAllByRegisteredMobile(mobileNo);
+            if (merit != null && otpService.generateOTP(mobileNo)) {
+                log.info("OTP sent to " + mobileNo);
                 return new ResponseEntity("OTP sent to your register Mobile no. or Email address", HttpStatus.OK);
+            } else {
+                return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+            }
         } else {
             return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
         }
     }
 
+    @PostMapping("/merit")
+    public ResponseEntity<Merit> save(@RequestBody Merit merit) {
+        //log.info(merit.);
+        return new ResponseEntity<>(meritService.saveOrUpdate(merit), HttpStatus.CREATED);
+    }
 
+    @PutMapping("/merit")
+    public ResponseEntity<Merit> update(Merit merit) {
+        return new ResponseEntity<>(meritService.saveOrUpdate(merit), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/merit")
+    public ResponseEntity<String> deleteById(Long id) {
+        return new ResponseEntity<>(meritService.deleteById(id), HttpStatus.OK);
+    }
 
 }
