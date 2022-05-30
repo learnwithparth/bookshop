@@ -87,8 +87,8 @@ public class MeritController {
         return new ResponseEntity<>(meritService.saveOrUpdate(merit), HttpStatus.OK);
     }
 
-    @DeleteMapping("/merit")
-    public ResponseEntity<String> deleteById(Long id) {
+    @DeleteMapping("/merit/{meritId}")
+    public ResponseEntity<String> deleteById(@PathVariable("meritId") Long id) {
         return new ResponseEntity<>(meritService.deleteById(id), HttpStatus.OK);
     }
 

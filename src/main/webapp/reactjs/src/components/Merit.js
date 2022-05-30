@@ -42,7 +42,7 @@ export default class Merit extends React.Component {
                 } else {
                     this.setState({"show": false});
                 }
-            })
+            }).catch(error => alert(error + ' while adding the merits'))
         this.setState(this.initialState);
     }
 

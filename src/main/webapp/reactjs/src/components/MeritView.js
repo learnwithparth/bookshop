@@ -10,7 +10,7 @@ export default class MeritView extends React.Component {
         this.mobileNoChanged = this.mobileNoChanged.bind(this);
         this.state = {
             merits: [],
-            input: {}
+            input: {},
         };
     }
 
@@ -23,6 +23,7 @@ export default class MeritView extends React.Component {
         registeredMobile: '',
         registeredEmail: '',
         optGenerated: false,
+        meritGenerated: false,
         otp: ''
     }
 
@@ -32,6 +33,7 @@ export default class MeritView extends React.Component {
 
 
     findMeritDetails = event => {
+        event.preventDefault();
             const url = "http://localhost:8081/admission/merit/generateOTP/" + this.state.registeredMobile;
             axios.get(url)
                 .then(response => {
@@ -40,9 +42,10 @@ export default class MeritView extends React.Component {
                 .catch(error => {
                     alert('Invalid Mobile No.');
                 });
-
-        this.state.optGenerated = true;
-        event.preventDefault();
+            this.setState({
+                otpGenerated: true,
+                meritGenerated: false
+            })
     }
 
     showMeritDetails = event => {
@@ -54,40 +57,13 @@ export default class MeritView extends React.Component {
                 this.setState({merits});
             })
             .catch(error => alert('Invalid OTP'));
-        //this.state.otpGenerated = false;
-    }
-
-    validate() {
-        let input = this.state.input;
-        let errors = {};
-        let isValid = true;
-
-
-        if (!input["registeredMobile"]) {
-            isValid = false;
-            errors["registeredMobile"] = "Please enter your phone number.";
-            alert('Please enter your phone number.');
-        }
-
-        if (typeof input["registeredMobile"] !== "undefined") {
-            var pattern = new RegExp(/^[0-9\b]+$/);
-            if (!pattern.test(input["registeredMobile"])) {
-                isValid = false;
-                errors["phone"] = "Please enter only number.";
-                alert('Please enter only number.');
-            } else if (input["registeredMobile"].length != 10) {
-                isValid = false;
-                errors["registeredMobile"] = "Please enter valid phone number.";
-                alert('Please enter valid phone number.');
-            }
-        }
-
         this.setState({
-            errors: errors
-        });
 
-        return isValid;
+        });
+        this.state.meritGenerated = true;
+        this.state.otpGenerated = false;
     }
+
 
     mobileNoChanged = event => {
         this.setState({
@@ -105,7 +81,7 @@ export default class MeritView extends React.Component {
                 <Card.Body>
                     <Form>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
-                            {/*{!this.state.optGenerated ?*/}
+                            {!this.state.optGenerated ?
                                 <div>
                                     <Form.Label>Mobile No.</Form.Label>
                                     <Form.Control required type="text" name="registeredMobile"
@@ -119,8 +95,15 @@ export default class MeritView extends React.Component {
                                         Please enter the Mobile No. provided at the time of registration.
                                     </Form.Text>
                                     <br/>
+                                    <br/>
+                                    <Button onClick={(event) => this.findMeritDetails(event)} variant="primary" type="submit">
+                                        Generate OTP
+                                    </Button> <Button onClick={(event) => this.resetMerit(event)} variant="primary" type="reset">
+                                    <FontAwesomeIcon icon={faUndo}/> Reset
+                                </Button>
+                                    <br/>
                                 </div>
-                                {/*:*/}
+                                :
                                 <div>
                                     <Form.Label>One Time Password (OTP)</Form.Label>
                                     <Form.Control required type="text" name="otp"
@@ -130,51 +113,50 @@ export default class MeritView extends React.Component {
                                                   className={"bg-dark text-white"}
                                                   style={{width: "450px"}}
                                     />
+                                    <br/>
+                                    <Button onClick={(event) => this.showMeritDetails(event)} type="submit">
+                                        Show Merit
+                                    </Button> <Button onClick={(event) => this.resetMerit(event)} variant="primary" type="reset">
+                                        <FontAwesomeIcon icon={faUndo}/> Reset
+                                    </Button>
                                 </div>
-                            {/*}*/}
-                        </Form.Group>
-                        {/*{!this.state.otpGenerated ?*/}
-                        <Button onClick={(event) => this.findMeritDetails(event)} variant="primary" type="submit">
-                            Generate OTP
-                        </Button>
-                        {/*:*/}
-                        <Button onClick={(event) => this.showMeritDetails(event)} type="submit">
-                            Show Merit
-                        </Button>
-                        {/*}*/}
-                        {' '}
-                        <Button onClick={(event) => this.resetMerit(event)} variant="primary" type="reset">
-                            <FontAwesomeIcon icon={faUndo}/> Reset
-                        </Button>
-                        <hr/>
-                        <Table bordered hover striped variant={"dark"}>
-                            <thead>
-                            <tr>
-                                <th>Application No.</th>
-                                <th>Registered Name</th>
-                                <th>CHARUSAT Merit Marks</th>
-                                <th>CHARUSAT Merit No</th>
-                                <th>ACPC Merit No.</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {
-                                this.state.merits.length === 0 ?
-                                    <tr align="centre">
-                                        <td colSpan={"7"}>{this.state.merits.length} Details are Not Available!!!</td>
-                                    </tr> :
-                                    this.state.merits.map((merit) => (
-                                        <tr>
-                                            <td>{merit.applicationNo}</td>
-                                            <td>{merit.registeredName}</td>
-                                            <td>{merit.charusatMeritMarks}</td>
-                                            <td>{merit.charusatMeritNo}</td>
-                                            <td>{merit.acpcMeritNo}</td>
-                                        </tr>
-                                    ))
                             }
-                            </tbody>
-                        </Table>
+                        </Form.Group>
+
+                        <hr/>
+                        {this.state.meritGenerated ?
+                            <div>
+                                <Table bordered hover striped variant={"dark"}>
+                                    <thead>
+                                    <tr>
+                                        <th>Application No.</th>
+                                        <th>Registered Name</th>
+                                        <th>CHARUSAT Merit Marks</th>
+                                        <th>CHARUSAT Merit No</th>
+                                        <th>ACPC Merit No.</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {
+                                        this.state.merits.length === 0 ?
+                                            <tr align="centre">
+                                                <td colSpan={"7"}>{this.state.merits.length} Details Available!!!</td>
+                                            </tr> :
+                                            this.state.merits.map((merit) => (
+                                                <tr>
+                                                    <td>{merit.applicationNo}</td>
+                                                    <td>{merit.registeredName}</td>
+                                                    <td>{merit.charusatMeritMarks}</td>
+                                                    <td>{merit.charusatMeritNo}</td>
+                                                    <td>{merit.acpcMeritNo}</td>
+                                                </tr>
+                                            ))
+                                    }
+                                    </tbody>
+                                </Table>
+                            </div>
+                            : null
+                        }
                     </Form>
                 </Card.Body>
             </Card>

@@ -23,7 +23,7 @@ function App() {
             <Route path="/viewMerit"  element={<MeritView/>}/>
             <Route path="/viewMeritList"  element={<MeritList/>}/>
             <Route path="/addMerit"  element={<Merit/>}/>
-            <Route path="/editMerit"  element={<Merit/>}/>
+            <Route path="/editMerit/:id"  element={<Merit/>}/>
             <Route path="/deleteMerit"  element={<Merit/>}/>
         </Routes>
             </Container>

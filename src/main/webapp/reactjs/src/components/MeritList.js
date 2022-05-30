@@ -50,6 +50,22 @@ export default class MeritList extends React.Component {
             })
             .catch(error => alert(error + ' while fetching all the merits'))
     }
+    deleteMerit = (meritId) => {
+        axios.delete("http://localhost:8081/admission/merit/"+meritId)
+            .then(response => {
+                if(response.data != null){
+                    this.setState({"show": true});
+                    setTimeout(()=>this.setState({"show": false}), 3000);
+                    alert("Merit Deleted Successfully");
+                    this.setState({
+                       merits: this.state.merits.filter(merit => merit.id !== meritId)
+                    });
+                } else {
+                    this.setState({"show": false});
+                }
+            }).catch(error => alert(error + ' while deleting the merits'))
+        this.setState(this.initialState);
+    }
 
     render() {
         return (
@@ -83,7 +99,7 @@ export default class MeritList extends React.Component {
                                         <td>
                                             <ButtonGroup>
                                                 <Link
-                                                    to={"edit/" + merit.id}
+                                                    to={"editMerit/" + merit.id}
                                                     className="btn btn-sm btn-outline-primary"
                                                 >
                                                     <FontAwesomeIcon icon={faEdit}/>
@@ -91,7 +107,7 @@ export default class MeritList extends React.Component {
                                                 <Button
                                                     size="sm"
                                                     variant="outline-danger"
-                                                    onClick={() => this.deleteMerit(merit.id)}
+                                                    onClick={this.deleteMerit.bind(this, merit.id)}
                                                 >
                                                     <FontAwesomeIcon icon={faTrash}/>
                                                 </Button>
