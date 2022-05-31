@@ -23,7 +23,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Slf4j
 @RestController
 @CrossOrigin(origins="http://localhost:3000")
-
 public class MeritController {
 
     MeritService meritService;
@@ -76,6 +75,15 @@ public class MeritController {
         }
     }
 
+    @GetMapping("/merit/{id}")
+    public ResponseEntity<Merit> generateOTP(@PathVariable("id") Long id) {
+        //log.info("MeritController - Mobile no. " + mobileNo + " has inquired for merit no.");
+        //Optional<Merit> merit = Optional.ofNullable(meritService.findAllByRegisteredMobile(mobileNo));
+        Merit merit= meritService.findById(id);
+        return new ResponseEntity(merit, HttpStatus.OK);
+
+    }
+
     @PostMapping("/merit")
     public ResponseEntity<Merit> save(@RequestBody Merit merit) {
         //log.info(merit.);
@@ -83,7 +91,8 @@ public class MeritController {
     }
 
     @PutMapping("/merit")
-    public ResponseEntity<Merit> update(Merit merit) {
+    public ResponseEntity<Merit> update(@RequestBody Merit merit) {
+        log.info("Record no. " + merit.getId() + " is getting updated");
         return new ResponseEntity<>(meritService.saveOrUpdate(merit), HttpStatus.OK);
     }
 

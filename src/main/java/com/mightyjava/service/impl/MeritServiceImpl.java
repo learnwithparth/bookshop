@@ -33,6 +33,11 @@ public class MeritServiceImpl implements MeritService {
     }
 
     @Override
+    public Merit findById(Long id) {
+        return meritRepository.findById(id).get();
+    }
+
+    @Override
     public Merit findAllByRegisteredMobile(String registeredMobile) {
         meritCheckedUpdate(registeredMobile);
         return meritRepository.findAllByRegisteredMobile(registeredMobile);

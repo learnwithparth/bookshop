@@ -2,14 +2,22 @@ import React, {Component} from "react";
 import {Card, Table, Form, Button, Image, Col, Row} from "react-bootstrap";
 import axios from 'axios';
 import MyToast from "./MyToast";
+import {useParams} from "react-router-dom";
+import {responsivePropType} from "react-bootstrap/createUtilityClasses";
 
 export default class Merit extends React.Component {
+
     constructor(props) {
+        //const { id } = useParams();
         super(props);
         this.state = this.initialState;
         this.state.show = false;
         this.meritChange = this.meritChange.bind(this);
         this.submitMerit = this.submitMerit.bind(this);
+        this.state = {
+            merits: [],
+
+        }
     }
     initialState = {
             applicationNo: '',
@@ -19,6 +27,24 @@ export default class Merit extends React.Component {
             acpcMeritNo: '',
             registeredMobile: '',
             registeredEmail: ''
+    }
+
+    componentDidMount() {
+        //const meritId = +this.props.match.params.id;
+        axios.get("http://localhost:8081/admission/merit/"+'7')
+            .then(response => {
+                if (response.data != null) {
+                    this.setState({
+                        applicationNo: response.data.applicationNo,
+                        registeredName: response.data.registeredName,
+                        charusatMeritMarks: response.data.charusatMeritMarks,
+                        charusatMeritNo: response.data.charusatMeritNo,
+                        acpcMeritNo: response.data.acpcMeritNo,
+                        registeredMobile: response.data.registeredMobile,
+                        registeredEmail: response.data.registeredEmail
+                    });
+                }
+            });
     }
 
     submitMerit(event) {
@@ -46,13 +72,45 @@ export default class Merit extends React.Component {
         this.setState(this.initialState);
     }
 
+    updateMerit = event => {
+        event.preventDefault();
+        const merit = {
+            id: this.state.id,
+            applicationNo: this.state.applicationNo,
+            registeredName: this.state.registeredName,
+            charusatMeritMarks: this.state.charusatMeritMarks,
+            charusatMeritNo: this.state.charusatMeritNo,
+            acpcMeritNo: this.state.acpcMeritNo,
+            registeredMobile: this.state.registeredMobile,
+            registeredEmail: this.state.registeredEmail
+        }
+        axios.put("http://localhost:8081/admission/merit/", merit)
+            .then(response => {
+                if(response.data != null){
+                    this.setState({"show": true});
+                    //setTimeout(()=>this.setState({"show": false}), 3000);
+                    setTimeout(()=>this.meritList(), 3000);
+                    alert("Merit Updated Successfully");
+                } else {
+                    this.setState({"show": false});
+                }
+            }).catch(error => alert(error + ' while adding the merits'))
+        this.setState(this.initialState);
+    }
+
     meritChange(event) {
         this.setState({
             [event.target.name]: event.target.value
         })
     }
 
+    meritList = () => {
+        return this.props.history.push("/viewMeritList");
+    };
+
     render() {
+
+
 
         return (
             <div>
@@ -117,6 +175,8 @@ export default class Merit extends React.Component {
                             </Row>
                             <Button variant="success" type="submit">
                                 Save
+                            </Button>  <Button onClick={()=>this.updateMerit()} variant="success" type="save">
+                                Update
                             </Button>
                         </Card.Body>
                     </Form>
