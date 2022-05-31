@@ -45,10 +45,20 @@ export default class MeritList extends React.Component {
     }
 
     componentDidMount() {
-        axios.get("http://localhost:8081/admission/merit/showAll/")
-            .then(response => {
-                const merits = response.data;
-                this.setState({merits});
+        this.findAllMerits(this.state.currentPage);
+    }
+
+    findAllMerits(currentPage) {
+        currentPage -= 1;
+        axios.get("http://localhost:8081/admission/merit/showAll?page=" + currentPage + "&size=" + this.state.meritsPerPage)
+            .then(response => response.data)
+            .then(data => {
+                this.setState({
+                    merits: data.content,
+                    totalPages: data.totalPages,
+                    totalElements: data.totalElements,
+                    currentPage: data.number + 1
+                });
             })
             .catch(error => alert(error + ' while fetching all the merits'))
     }
@@ -71,55 +81,47 @@ export default class MeritList extends React.Component {
     }
 
     changePage = (event) => {
+        let targetPage = parseInt(event.target.value)
+        this.findAllMerits(targetPage)
         this.setState({
-            [event.target.name]: parseInt(event.target.value),
+            [event.target.name]: targetPage
         });
     };
 
     firstPage = () => {
-        if (this.state.currentPage > 1) {
-            this.setState({
-                currentPage: 1,
-            });
+        let firstPage = 1;
+        if (this.state.currentPage > firstPage) {
+            this.findAllMerits(firstPage);
         }
     };
 
     prevPage = () => {
-        if (this.state.currentPage > 1) {
-            this.setState({
-                currentPage: this.state.currentPage - 1,
-            });
+        let prevPage = 1;
+        if (this.state.currentPage > prevPage) {
+            this.findAllMerits(this.state.currentPage - prevPage);
         }
     };
 
     lastPage = () => {
-
-        if (
-            this.state.currentPage < Math.ceil(this.state.merits.length / this.state.meritsPerPage)
-        ) {
-            this.setState({
-                currentPage: Math.ceil(this.state.merits.length / this.state.meritsPerPage),
-            });
+        let condition = Math.ceil(this.state.totalElements / this.state.meritsPerPage);
+        if (this.state.currentPage < condition) {
+            this.findAllMerits(condition);
         }
     };
 
     nextPage = () => {
-        if (
-            this.state.currentPage <
-            Math.ceil(this.state.merits.length / this.state.meritsPerPage)
-        ) {
-            this.setState({
-                currentPage: this.state.currentPage + 1,
-            });
+        if (this.state.currentPage <
+            Math.ceil(this.state.totalElements / this.state.meritsPerPage)) {
+            this.findAllMerits(this.state.currentPage + 1);
         }
     };
 
     render() {
-        const {currentPage, meritsPerPage} = this.state;
-        const lastIndex = currentPage * meritsPerPage;
-        const firstIndex = lastIndex - meritsPerPage;
-        const currentMerits = this.state.merits.slice(firstIndex, lastIndex);
-        const totalPages = this.state.merits.length / meritsPerPage;
+        const {merits, currentPage, totalPages} = this.state;
+        // const lastIndex = currentPage * meritsPerPage;
+        // const firstIndex = lastIndex - meritsPerPage;
+        // const currentMerits = this.state.merits.slice(firstIndex, lastIndex);
+        // const totalPages = Math.ceil(this.state.merits.length / meritsPerPage);
         return (
             <Card className={"border border-dark bg-dark text-white"}>
                 <Card.Header>Merit List 2022</Card.Header>
@@ -137,11 +139,11 @@ export default class MeritList extends React.Component {
                         </thead>
                         <tbody>
                         {
-                            this.state.merits.length === 0 ?
+                            merits.length === 0 ?
                                 <tr align="centre">
-                                    <td colSpan={"7"}>{this.state.merits.length} Details are Not Available!!!</td>
+                                    <td colSpan={"7"}>{merits.length} Details are Not Available!!!</td>
                                 </tr> :
-                                currentMerits.map((merit) => (
+                                merits.map((merit) => (
                                     <tr key={merit.id}>
                                         <td>{merit.applicationNo}</td>
                                         <td>{merit.registeredName}</td>
@@ -178,22 +180,22 @@ export default class MeritList extends React.Component {
                     <div style={{float: "right"}}>
                         <InputGroup size="sm">
                             {/*<InputGroup.Prepend>*/}
-                                <Button
-                                    type="button"
-                                    variant="outline-info"
-                                    disabled={currentPage === 1}
-                                    onClick={this.firstPage}
-                                >
-                                    <FontAwesomeIcon icon={faFastBackward}/> First
-                                </Button>
-                                <Button
-                                    type="button"
-                                    variant="outline-info"
-                                    disabled={currentPage === 1}
-                                    onClick={this.prevPage}
-                                >
-                                    <FontAwesomeIcon icon={faStepBackward}/> Prev
-                                </Button>
+                            <Button
+                                type="button"
+                                variant="outline-info"
+                                disabled={currentPage === 1}
+                                onClick={this.firstPage}
+                            >
+                                <FontAwesomeIcon icon={faFastBackward}/> First
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="outline-info"
+                                disabled={currentPage === 1}
+                                onClick={this.prevPage}
+                            >
+                                <FontAwesomeIcon icon={faStepBackward}/> Prev
+                            </Button>
                             {/*</InputGroup.Prepend>*/}
                             <FormControl
                                 className={"page-num bg-dark"}
@@ -202,22 +204,22 @@ export default class MeritList extends React.Component {
                                 onChange={this.changePage}
                             />
                             {/*<InputGroup.Append>*/}
-                                <Button
-                                    type="button"
-                                    variant="outline-info"
-                                    disabled={currentPage === totalPages}
-                                    onClick={this.nextPage}
-                                >
-                                    <FontAwesomeIcon icon={faStepForward}/> Next
-                                </Button>
-                                <Button
-                                    type="button"
-                                    variant="outline-info"
-                                    disabled={currentPage === totalPages}
-                                    onClick={this.lastPage}
-                                >
-                                    <FontAwesomeIcon icon={faFastForward}/> Last
-                                </Button>
+                            <Button
+                                type="button"
+                                variant="outline-info"
+                                disabled={currentPage === totalPages}
+                                onClick={this.nextPage}
+                            >
+                                <FontAwesomeIcon icon={faStepForward}/> Next
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="outline-info"
+                                disabled={currentPage === totalPages}
+                                onClick={this.lastPage}
+                            >
+                                <FontAwesomeIcon icon={faFastForward}/> Last
+                            </Button>
                             {/*</InputGroup.Append>*/}
                         </InputGroup>
                     </div>

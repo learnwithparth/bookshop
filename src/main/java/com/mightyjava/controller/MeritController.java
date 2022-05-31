@@ -10,6 +10,8 @@ import com.mightyjava.service.MeritService;
 import com.mightyjava.service.OTPService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,10 +36,9 @@ public class MeritController {
     }
 
     @GetMapping("/merit/showAll")
-    public ResponseEntity<Merit> findAll(){
+    public ResponseEntity<Page<Merit>> findAll(Pageable pageable){
         log.info("Fetching all merits");
-        List<Merit> merit = meritService.findAll();
-        return new ResponseEntity(merit, HttpStatus.OK);
+        return new ResponseEntity(meritService.findAll(pageable), HttpStatus.OK);
     }
 
 

@@ -6,8 +6,11 @@ import com.mightyjava.service.MeritService;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 import java.util.UUID;
@@ -23,8 +26,8 @@ public class MeritServiceImpl implements MeritService {
     }
 
     @Override
-    public List<Merit> findAll() {
-        return meritRepository.findAll();
+    public Page<Merit> findAll(Pageable pageable) {
+        return meritRepository.findAll(pageable);
     }
 
     @Override
@@ -45,7 +48,7 @@ public class MeritServiceImpl implements MeritService {
 
     @Override
     public Merit saveOrUpdate(Merit merit) {
-        return meritRepository.saveAndFlush(merit);
+        return meritRepository.save(merit);
     }
 
     @Override
@@ -60,10 +63,10 @@ public class MeritServiceImpl implements MeritService {
         return jsonObject.toString();
     }
 
-    @Override
-    public List<Merit> saveAll(List<Merit> merits) {
-        return meritRepository.saveAll(merits);
-    }
+//    @Override
+//    public List<Merit> saveAll(List<Merit> merits) {
+//        return meritRepository.saveAll(merits);
+//    }
 
     @Transactional
     public void meritCheckedUpdate(String registeredMobile){
