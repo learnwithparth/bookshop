@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface MeritService {
-    Page<Merit> findAll(Pageable pageble);
+    Page<Merit> findAll(Pageable pageable);
+    Page<Merit> findAll(Pageable pageable, String searchText);
     Merit findAllByRegisteredEmail(String registeredEmail);
     Merit findById(Long id);
     Merit findAllByRegisteredMobile(String registeredMobile);

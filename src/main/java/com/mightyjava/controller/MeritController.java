@@ -1,17 +1,15 @@
 package com.mightyjava.controller;
 
-
-import com.mightyjava.domain.Book;
 import com.mightyjava.domain.Merit;
-import com.mightyjava.exception.BookNotFoundException;
-import com.mightyjava.resource.Resource;
-import com.mightyjava.resource.impl.BookResourceImpl;
 import com.mightyjava.service.MeritService;
 import com.mightyjava.service.OTPService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,10 +33,21 @@ public class MeritController {
         this.meritService = meritService; this.otpService=otpService;
     }
 
-    @GetMapping("/merit/showAll")
-    public ResponseEntity<Page<Merit>> findAll(Pageable pageable){
+    @GetMapping("/merit/search/{searchText}")
+    public ResponseEntity<Page<Merit>> findAll(Pageable pageable, @PathVariable("searchText") String searchText){
         log.info("Fetching all merits");
-        return new ResponseEntity(meritService.findAll(pageable), HttpStatus.OK);
+        return new ResponseEntity(meritService.findAll(pageable, searchText), HttpStatus.OK);
+    }
+
+    @GetMapping("/merit/showAll")
+    public ResponseEntity<Page<Merit>> findAll(int pageNumber, int pageSize, String sortBy, String sortDir){
+        log.info("Fetching all merits");
+        return new ResponseEntity(meritService.findAll(
+                PageRequest.of(
+                        pageNumber, pageSize,
+                        sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending()
+                )
+        ), HttpStatus.OK);
     }
 
 

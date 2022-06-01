@@ -31,6 +31,11 @@ public class MeritServiceImpl implements MeritService {
     }
 
     @Override
+    public Page<Merit> findAll(Pageable pageable, String searchText) {
+        return meritRepository.findAllForSearch(pageable, searchText);
+    }
+
+    @Override
     public Merit findAllByRegisteredEmail(String registeredEmail) {
         return meritRepository.findAllByRegisteredEmail(registeredEmail);
     }
