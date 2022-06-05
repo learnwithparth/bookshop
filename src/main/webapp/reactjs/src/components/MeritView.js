@@ -4,6 +4,7 @@ import axios from "axios";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEdit, faTrash, faUndo} from "@fortawesome/free-solid-svg-icons";
 
+
 export default class MeritView extends React.Component {
     constructor() {
         super();
@@ -11,6 +12,8 @@ export default class MeritView extends React.Component {
         this.state = {
             merits: [],
             input: {},
+            optGenerated: false,
+            meritGenerated: false
         };
     }
 
@@ -31,6 +34,10 @@ export default class MeritView extends React.Component {
         this.setState(() => this.initialState);
     }
 
+    updateStateOtpGenerated() {
+        this.setState({optGenerated : true})
+    }
+
 
     findMeritDetails = event => {
         event.preventDefault();
@@ -42,10 +49,7 @@ export default class MeritView extends React.Component {
                 .catch(error => {
                     alert('Invalid Mobile No.');
                 });
-            this.setState({
-                otpGenerated: true,
-                meritGenerated: false
-            })
+        this.updateStateOtpGenerated();
     }
 
     showMeritDetails = event => {
@@ -56,10 +60,13 @@ export default class MeritView extends React.Component {
                 const merits = response.data;
                 this.setState({merits});
             })
-            .catch(error => alert('Invalid OTP'));
-        this.setState({
+            .catch(error => {
+                alert('Invalid OTP');
+                this.setState({
+                    [event.target.name]: ''
+                })
+            });
 
-        });
         this.state.meritGenerated = true;
         this.state.otpGenerated = false;
     }
@@ -84,12 +91,14 @@ export default class MeritView extends React.Component {
                             {!this.state.optGenerated ?
                                 <div>
                                     <Form.Label>Mobile No.</Form.Label>
-                                    <Form.Control required type="text" name="registeredMobile"
+                                    <Form.Control required type="number" name="registeredMobile"
                                                   value={this.state.registeredMobile}
                                                   onChange={this.mobileNoChanged}
                                                   placeholder="Enter registered mobile no."
                                                   className={"bg-dark text-white"}
                                                   style={{width: "450px"}}
+                                                  //maxLength={10}
+                                                  //pattern="[+-]?\d+(?:[.,]\d+)?"
                                     />
                                     <Form.Text className="text-muted">
                                         Please enter the Mobile No. provided at the time of registration.

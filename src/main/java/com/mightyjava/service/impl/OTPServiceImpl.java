@@ -9,7 +9,7 @@ import com.mightyjava.service.OTPService;
 import lombok.extern.slf4j.Slf4j;
 
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -27,8 +27,14 @@ public class OTPServiceImpl implements OTPService {
     private static final Integer EXPIRE_MINS = 2;
     private LoadingCache otpCache;
 
-    public OTPServiceImpl() {
+    private SMSServiceImpl smsService;
+    private MailServiceImpl mailService;
+
+    @Autowired
+    public OTPServiceImpl(SMSServiceImpl smsService, MailServiceImpl mailService) {
         super();
+        this.smsService = smsService;
+        this.mailService = mailService;
         otpCache = CacheBuilder.newBuilder().
                 expireAfterWrite(EXPIRE_MINS, TimeUnit.MINUTES)
                 .build(new CacheLoader<String, Integer>() {
@@ -39,16 +45,21 @@ public class OTPServiceImpl implements OTPService {
     }
 
     @Override
-    public boolean generateOTP(String mobileNo) {
+    public boolean generateOTP(String mobileNo, String email) {
         Random random = new Random();
-        //int otp = 100000 + random.nextInt(900000);
-        int otp=123;
+        int otp = 100000 + random.nextInt(900000);
+        log.info(otp + " is otp for " + mobileNo);
+        //int otp=123;
         otpCache.put(mobileNo, otp);
-//        sendOTPSms("VDJ1muqjMtm6puO4",
-//                otp + " is your One Time Password(OTP) for Merit Access. This OTP is valid till 120 sec - CHARUSAT",
-//                "CHRUST",
-//                mobileNo);
+        smsService.sendOTPSms("VDJ1muqjMtm6puO4",
+                otp + " is your One Time Password(OTP) for Merit Access. This OTP is valid till 120 sec - CHARUSAT",
+                "CHRUST",
+                mobileNo);
+        log.info("SMS Sent");
+        mailService.sendMailWithAttachment("hod.it@charusat.ac.in", "OTP for CHARUSAT Admission Merit No.", otp + " is your One Time Password(OTP) for Merit Access. This OTP is valid till 120 sec - CHARUSAT", null);
+        log.info("Mail Sent");
         return true;
+
     }
 
     @Override

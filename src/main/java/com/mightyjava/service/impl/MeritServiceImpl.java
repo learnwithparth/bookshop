@@ -18,7 +18,7 @@ import java.util.UUID;
 @Service
 public class MeritServiceImpl implements MeritService {
 
-    MeritRepository meritRepository;
+    private MeritRepository meritRepository;
 
     @Autowired
     public MeritServiceImpl(MeritRepository meritRepository) {
@@ -47,7 +47,10 @@ public class MeritServiceImpl implements MeritService {
 
     @Override
     public Merit findAllByRegisteredMobile(String registeredMobile) {
-        meritCheckedUpdate(registeredMobile);
+        Merit merit = meritRepository.findAllByRegisteredMobile(registeredMobile);
+        if (merit != null) {
+            meritCheckedUpdate(registeredMobile);
+        }
         return meritRepository.findAllByRegisteredMobile(registeredMobile);
     }
 
