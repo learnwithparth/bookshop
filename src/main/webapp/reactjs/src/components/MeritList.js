@@ -61,7 +61,7 @@ export default class MeritList extends React.Component {
     findAllMerits(currentPage) {
         currentPage -= 1;
         let sortDir = this.state.sortToggle ? "asc" : "desc";
-        axios.get("http://localhost:8081/admission/merit/showAll?pageNumber=" + currentPage + "&pageSize=" + this.state.meritsPerPage + "&sortBy=charusatMeritMarks&sortDir=" + sortDir)
+        axios.get("http://localhost:8081/admission/manage/merit/showAll?pageNumber=" + currentPage + "&pageSize=" + this.state.meritsPerPage + "&sortBy=charusatMeritMarks&sortDir=" + sortDir)
             .then(response => response.data)
             .then(data => {
                 this.setState({
@@ -75,7 +75,7 @@ export default class MeritList extends React.Component {
     }
 
     deleteMerit = (meritId) => {
-        axios.delete("http://localhost:8081/admission/merit/" + meritId)
+        axios.delete("http://localhost:8081/admission/manage/merit/" + meritId)
             .then(response => {
                 if (response.data != null) {
                     this.setState({"show": true});
@@ -158,7 +158,7 @@ export default class MeritList extends React.Component {
     searchData = (currentPage) => {
         currentPage -= 1;
 
-        axios.get("http://localhost:8081/admission/merit/search/"+this.state.search+"?page="+currentPage+"&size="+this.state.meritsPerPage)
+        axios.get("http://localhost:8081/admission/manage/merit/search/"+this.state.search+"?page="+currentPage+"&size="+this.state.meritsPerPage)
             .then(response => response.data)
             .then(data => {
                 this.setState({

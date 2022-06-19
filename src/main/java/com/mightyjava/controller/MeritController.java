@@ -34,13 +34,13 @@ public class MeritController {
         this.otpService = otpService;
     }
 
-    @GetMapping("/merit/search/{searchText}")
+    @GetMapping("/manage/merit/search/{searchText}")
     public ResponseEntity<Page<Merit>> findAll(Pageable pageable, @PathVariable("searchText") String searchText) {
         log.info("Fetching all merits");
         return new ResponseEntity(meritService.findAll(pageable, searchText), HttpStatus.OK);
     }
 
-    @GetMapping("/merit/showAll")
+    @GetMapping("/manage/merit/showAll")
     public ResponseEntity<Page<Merit>> findAll(int pageNumber, int pageSize, String sortBy, String sortDir) {
         log.info("Fetching all merits");
         return new ResponseEntity(meritService.findAll(
@@ -52,7 +52,7 @@ public class MeritController {
     }
 
 
-    @GetMapping("/merit/validateOTP")
+    @GetMapping("/student/merit/validateOTP")
     public ResponseEntity<Merit> validateOTP(@RequestParam("registeredMobile") String mobileNo,
                                              @RequestParam("otp") int otp) {
         log.info("MeritController - Mobile no. " + mobileNo + " has inquired for merit no. with OTP " + otp);
@@ -68,7 +68,7 @@ public class MeritController {
         }
     }
 
-    @GetMapping("/merit/generateOTP/{mobileOrEmail}")
+    @GetMapping("/student/merit/generateOTP/{mobileOrEmail}")
     public ResponseEntity<Merit> generateOTP(@PathVariable("mobileOrEmail") String mobileNo) {
         log.info("MeritController - Mobile no. " + mobileNo + " has inquired for merit no.");
         //Optional<Merit> merit = Optional.ofNullable(meritService.findAllByRegisteredMobile(mobileNo));
@@ -89,7 +89,7 @@ public class MeritController {
         }
     }
 
-    @GetMapping("/merit/{id}")
+    @GetMapping("/student/merit/{id}")
     public ResponseEntity<Merit> generateOTP(@PathVariable("id") Long id) {
         //log.info("MeritController - Mobile no. " + mobileNo + " has inquired for merit no.");
         //Optional<Merit> merit = Optional.ofNullable(meritService.findAllByRegisteredMobile(mobileNo));
@@ -98,19 +98,19 @@ public class MeritController {
 
     }
 
-    @PostMapping("/merit")
+    @PostMapping("/manage/merit")
     public ResponseEntity<Merit> save(@RequestBody Merit merit) {
         //log.info(merit.);
         return new ResponseEntity<>(meritService.saveOrUpdate(merit), HttpStatus.CREATED);
     }
 
-    @PutMapping("/merit")
+    @PutMapping("/manage/merit")
     public ResponseEntity<Merit> update(@RequestBody Merit merit) {
         log.info("Record no. " + merit.getId() + " is getting updated");
         return new ResponseEntity<>(meritService.saveOrUpdate(merit), HttpStatus.OK);
     }
 
-    @DeleteMapping("/merit/{meritId}")
+    @DeleteMapping("/manage/merit/{meritId}")
     public ResponseEntity<String> deleteById(@PathVariable("meritId") Long id) {
         return new ResponseEntity<>(meritService.deleteById(id), HttpStatus.OK);
     }
