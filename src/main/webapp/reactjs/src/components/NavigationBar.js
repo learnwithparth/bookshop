@@ -20,6 +20,7 @@ export default class NavigationBar extends React.Component {
                                 <Nav.Link href="#action2">Convocation</Nav.Link>
                                 <NavDropdown title="Admission" id="navbarScrollingDropdown">
                                     <NavDropdown.Item href="addMerit">Add Merit</NavDropdown.Item>
+                                    <NavDropdown.Item href="meritregister">Apply for management quota admission</NavDropdown.Item>
                                     <NavDropdown.Item href="viewMerit">
                                         View Your Merit
                                     </NavDropdown.Item>

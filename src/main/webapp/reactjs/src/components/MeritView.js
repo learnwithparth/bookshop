@@ -41,7 +41,7 @@ export default class MeritView extends React.Component {
 
     findMeritDetails = event => {
         event.preventDefault();
-            const url = "http://localhost:8081/admission/merit/generateOTP/" + this.state.registeredMobile;
+            const url = "http://localhost:8081/admission/student/merit/generateOTP/" + this.state.registeredMobile;
             axios.get(url)
                 .then(response => {
                     alert(response.data);
@@ -54,7 +54,7 @@ export default class MeritView extends React.Component {
 
     showMeritDetails = event => {
         event.preventDefault();
-        const url = "http://localhost:8081/admission/merit/validateOTP?registeredMobile=" + this.state.registeredMobile + "&otp=" + this.state.otp;
+        const url = "http://localhost:8081/admission/student/merit/validateOTP?registeredMobile=" + this.state.registeredMobile + "&otp=" + this.state.otp;
         axios.get(url)
             .then(response => {
                 const merits = response.data;

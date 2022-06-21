@@ -7,8 +7,9 @@ import Footer from './components/Footer';
 import Merit from "./components/Merit";
 import MeritList from "./components/MeritList";
 import MeritView from "./components/MeritView";
-import Login from "./components/login.js";
-import Register from "./components/register.js";
+import Login from "./components/Login.js";
+import MeritRegister from "./components/MeritRegister";
+import Register from "./components/Register";
 
 function App() {
     return (
@@ -20,11 +21,13 @@ function App() {
                     <Route path="/" element={<MeritList/>}/>
                     <Route path="/viewMerit" element={<MeritView/>}/>
                     <Route path="/viewMeritList" element={<MeritList/>}/>
+                    <Route path="/meritregister" element={<MeritRegister/>}/>
                     <Route path="/addMerit" element={<Merit/>}/>
                     <Route path="/editMerit/:id" element={<Merit/>}/>
                     <Route path="/deleteMerit" element={<Merit/>}/>
                     <Route path="/login" element={<Login/>}/>
                     <Route path="/register" element={<Register/>}/>
+
                 </Routes>
             </Container>
             <Footer/>
