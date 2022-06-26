@@ -80,7 +80,7 @@ public class MeritController {
                 emailAddress = merit.getRegisteredEmail();
                 otpService.generateOTP(mobileNo, emailAddress);
                 log.info("OTP sent to " + mobileNo + ":" + emailAddress);
-                return new ResponseEntity("OTP sent to your register Mobile no. or Email address.", HttpStatus.OK);
+                return new ResponseEntity("OTP sent to your register Mobile no. and Email address.", HttpStatus.OK);
             } else {
                 return new ResponseEntity("Mobile no. is not registered.", HttpStatus.BAD_REQUEST);
             }

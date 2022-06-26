@@ -1,5 +1,5 @@
 import React from "react";
-import { Toast } from "react-bootstrap";
+import {Toast} from "react-bootstrap";
 
 const MyToast = (props) => {
     const toastCss = {
@@ -12,7 +12,8 @@ const MyToast = (props) => {
     };
 
     return (
-        <div style={props.show ? toastCss : null}>
+        // <div style={props.show ? toastCss : null}>
+            <div>
             <Toast
                 className={`border text-white ${
                     props.type === "success"
@@ -27,9 +28,10 @@ const MyToast = (props) => {
                     }`}
                     closeButton={false}
                 >
-                    <strong className="mr-auto">Success</strong>
+                    {props.message}
+                    {/*<strong className="mr-auto">Success</strong>*/}
                 </Toast.Header>
-                <Toast.Body>{props.message}</Toast.Body>
+                {/*<Toast.Body>{props.message}</Toast.Body>*/}
             </Toast>
         </div>
     );

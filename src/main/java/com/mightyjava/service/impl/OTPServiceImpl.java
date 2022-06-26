@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -45,7 +46,8 @@ public class OTPServiceImpl implements OTPService {
     }
 
     @Override
-    public boolean generateOTP(String mobileNo, String email) {
+    @Async
+    public Object generateOTP(String mobileNo, String email) {
         Random random = new Random();
         int otp = 100000 + random.nextInt(900000);
         log.info(otp + " is otp for " + mobileNo);

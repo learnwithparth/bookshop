@@ -1,10 +1,5 @@
-import React, {useState, useRef, useEffect} from 'react';
-import {Form, Card, Col, Row, Button, DropdownButton, Dropdown, FormGroup} from 'react-bootstrap';
-import Select from "react-select";
-import SelectSearch from "react-select-search";
-import data from '../../src/json/data.json';
-import countryStateCity from '../../src/json/countriesStatesCities.json';
-import Accordion from 'react-bootstrap/Accordion';
+import React, {useState, useEffect} from 'react';
+import {Form, Card, Col, Row, Button, FormGroup} from 'react-bootstrap';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUndo} from "@fortawesome/free-solid-svg-icons";
 

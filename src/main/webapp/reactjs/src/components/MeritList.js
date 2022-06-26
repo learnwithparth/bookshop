@@ -4,7 +4,6 @@ import './Style.css';
 import {
     Card,
     Table,
-    Image,
     ButtonGroup,
     Button,
     InputGroup,

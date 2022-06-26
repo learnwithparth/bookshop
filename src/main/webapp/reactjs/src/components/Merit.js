@@ -1,9 +1,8 @@
-import React, {Component} from "react";
-import {Card, Table, Form, Button, Image, Col, Row} from "react-bootstrap";
+import React from "react";
+import {Card, Form, Button, Col, Row} from "react-bootstrap";
 import axios from 'axios';
 import MyToast from "./MyToast";
-import {useParams} from "react-router-dom";
-import {responsivePropType} from "react-bootstrap/createUtilityClasses";
+
 
 export default class Merit extends React.Component {
 
